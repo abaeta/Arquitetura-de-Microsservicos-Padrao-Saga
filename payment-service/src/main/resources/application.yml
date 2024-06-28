@@ -2,6 +2,13 @@ server:
   port: 8091
 
 spring:
+  kafka:
+    bootstrap-servers: ${KAFKA_BROKER:localhost:9092}
+    topic:
+      teste: teste
+    consumer:
+      auto-offset-reset: latest
+      group-id: payment-group
 
   datasource:
     driver-class-name: org.postgresql.Driver
@@ -15,3 +22,9 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
+
+logging:
+  level:
+    org:
+      apache:
+        kafka: OFF
