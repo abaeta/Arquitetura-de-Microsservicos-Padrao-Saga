@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Entity
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "inventory")
@@ -18,7 +19,7 @@ public class Inventory {
     private Integer id;
 
     @Column(nullable = false)
-    private String code;
+    private String productCode;
 
     @Column(nullable = false)
     private Integer available;
