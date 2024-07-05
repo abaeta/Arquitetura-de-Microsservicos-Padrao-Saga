@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 @AllArgsConstructor
 public class SagaOrchestratorConsumer {
 
-    private final OrchestratorService orchestratorService;
+    private final OrchestratorService service;
     private final JsonUtil jsonUtil;
 
     @KafkaListener(
@@ -22,7 +22,7 @@ public class SagaOrchestratorConsumer {
     public void consumeStartSagaEvent(String payload) {
         log.info("Receiving event {} from start-saga topic", payload);
         var event = jsonUtil.toEvent(payload);
-        orchestratorService.startSaga(event);
+        service.startSaga(event);
     }
 
     @KafkaListener(
@@ -32,26 +32,26 @@ public class SagaOrchestratorConsumer {
     public void consumeOrchestratorEvent(String payload) {
         log.info("Receiving event {} from orchestrator topic", payload);
         var event = jsonUtil.toEvent(payload);
-        orchestratorService.continueSaga(event);
+        service.continueSaga(event);
     }
 
     @KafkaListener(
             groupId = "${spring.kafka.consumer.group-id}",
             topics = "${spring.kafka.topic.finish-success}"
     )
-    public void consumeFinishSuccessEvent(String payload) {
+    public void consumeFinishSagaSuccessEvent(String payload) {
         log.info("Receiving event {} from finish-success topic", payload);
         var event = jsonUtil.toEvent(payload);
-        orchestratorService.finishSagaSuccess(event);
+        service.finishSagaSuccess(event);
     }
 
     @KafkaListener(
             groupId = "${spring.kafka.consumer.group-id}",
             topics = "${spring.kafka.topic.finish-fail}"
     )
-    public void consumeFinishFailEvent(String payload) {
+    public void consumeFinishSagaFailEvent(String payload) {
         log.info("Receiving event {} from finish-fail topic", payload);
         var event = jsonUtil.toEvent(payload);
-        orchestratorService.finishSagaFail(event);
+        service.finishSagaFail(event);
     }
 }
